@@ -1,0 +1,1258 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
+  <title>Risk Workshop Interactive Template (HTML) — 5 Sections</title>
+  <style>
+    :root{
+      --bg:#0b1020;
+      --panel: rgba(255,255,255,.06);
+      --panel2: rgba(255,255,255,.09);
+      --ink:#eef2ff;
+      --muted: rgba(238,242,255,.75);
+      --line: rgba(238,242,255,.18);
+      --accent:#7dd3fc;
+
+      --green:#1f9d55;
+      --yellow:#f4c542;
+      --orange:#f59e0b;
+      --red:#ef4444;
+
+      --shadow: 0 16px 50px rgba(0,0,0,.35);
+      --radius: 16px;
+      --radius2: 12px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans Thai", "Noto Sans", Arial, sans-serif;
+    }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family: var(--sans);
+      background: radial-gradient(1200px 600px at 20% 0%, rgba(125,211,252,.15), transparent 60%),
+                  radial-gradient(900px 500px at 80% 10%, rgba(244,197,66,.10), transparent 60%),
+                  linear-gradient(180deg, #070a14, var(--bg));
+      color:var(--ink);
+    }
+    header{
+      position: sticky; top:0; z-index: 50;
+      backdrop-filter: blur(10px);
+      background: rgba(11,16,32,.72);
+      border-bottom: 1px solid var(--line);
+    }
+    .wrap{ max-width: 1200px; margin: 0 auto; padding: 14px 16px; }
+    .toprow{
+      display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap;
+    }
+    h1{ margin:0; font-size: 18px; letter-spacing:.2px; }
+    .sub{ margin:0; color:var(--muted); font-size: 13px; }
+    .btns{ display:flex; gap:8px; flex-wrap:wrap; }
+    button{
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.06);
+      color: var(--ink);
+      padding: 9px 12px;
+      border-radius: 999px;
+      cursor:pointer;
+      box-shadow: 0 10px 25px rgba(0,0,0,.12);
+      transition: .15s transform, .15s background;
+      font-weight: 600;
+      font-size: 13px;
+    }
+    button:hover{ transform: translateY(-1px); background: rgba(255,255,255,.10); }
+    button.primary{
+      border-color: rgba(125,211,252,.45);
+      background: rgba(125,211,252,.12);
+    }
+    button.danger{
+      border-color: rgba(239,68,68,.35);
+      background: rgba(239,68,68,.12);
+    }
+
+    main{ padding: 18px 0 60px; }
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+    @media (min-width: 980px){
+      .grid.two{ grid-template-columns: 1.08fr .92fr; }
+    }
+
+    .card{
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .card .hd{
+      padding: 14px 14px 10px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.08), transparent);
+      display:flex; align-items:flex-start; justify-content:space-between; gap:10px; flex-wrap:wrap;
+    }
+    .card .hd h2{
+      margin:0;
+      font-size: 16px;
+    }
+    .card .hd .hint{
+      margin:0;
+      color: var(--muted);
+      font-size: 12.5px;
+      line-height: 1.35;
+      max-width: 720px;
+    }
+    .card .bd{ padding: 14px; }
+
+    .row{ display:flex; gap:12px; flex-wrap:wrap; }
+    .field{
+      flex: 1 1 220px;
+      min-width: 220px;
+    }
+    .field label{
+      display:block;
+      font-size: 12.5px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    input[type="text"], input[type="number"], textarea, select{
+      width:100%;
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,.18);
+      color: var(--ink);
+      padding: 10px 10px;
+      border-radius: 12px;
+      outline:none;
+      font-size: 14px;
+    }
+    textarea{ min-height: 84px; resize: vertical; }
+    .small{ font-size: 12.5px; color: var(--muted); margin-top:6px; line-height:1.4; }
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.06);
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size: 12.5px;
+      color: var(--muted);
+    }
+    .pill b{ color: var(--ink); }
+    .pill .dot{ width:10px; height:10px; border-radius:50%; background: var(--accent); box-shadow: 0 0 0 4px rgba(125,211,252,.12); }
+
+    table{
+      width:100%;
+      border-collapse: collapse;
+      overflow:hidden;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,.12);
+    }
+    th, td{
+      border-bottom: 1px solid var(--line);
+      padding: 10px 10px;
+      vertical-align: top;
+      font-size: 13px;
+    }
+    th{
+      text-align:left;
+      background: rgba(255,255,255,.07);
+      color: var(--muted);
+      font-weight: 700;
+    }
+    tr:last-child td{ border-bottom: none; }
+    td .mini{
+      width:100%;
+      border:1px solid rgba(238,242,255,.16);
+      background: rgba(0,0,0,.18);
+      border-radius: 10px;
+      padding: 8px 8px;
+      color: var(--ink);
+      font-size: 13px;
+    }
+    td .mini:focus{ outline: 2px solid rgba(125,211,252,.30); }
+    .tight td, .tight th{ padding: 8px 8px; }
+    .right{ text-align:right; }
+    .center{ text-align:center; }
+
+    .legend{
+      display:flex; gap:8px; flex-wrap:wrap; align-items:center;
+      margin-top: 10px;
+    }
+    .lg{
+      display:flex; gap:8px; align-items:center;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.05);
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .sw{ width:12px; height:12px; border-radius: 4px; }
+    .sw.red{ background: var(--red); }
+    .sw.orange{ background: var(--orange); }
+    .sw.yellow{ background: var(--yellow); }
+    .sw.green{ background: var(--green); }
+
+    .kpi{
+      display:grid;
+      grid-template-columns: repeat(4, minmax(0,1fr));
+      gap: 10px;
+    }
+    @media (max-width: 820px){ .kpi{ grid-template-columns: 1fr 1fr; } }
+    .kpi .box{
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.05);
+      border-radius: 14px;
+      padding: 10px 12px;
+    }
+    .kpi .box .t{ font-size: 12px; color: var(--muted); margin:0; }
+    .kpi .box .v{ font-size: 18px; margin: 6px 0 0; font-weight: 800; letter-spacing: .2px; }
+    .status{
+      margin-top: 10px;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px dashed rgba(238,242,255,.25);
+      background: rgba(0,0,0,.14);
+      color: var(--ink);
+      line-height: 1.45;
+      font-size: 13px;
+    }
+    .status b{ font-weight: 900; }
+
+    /* Risk Map */
+    .mapwrap{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    @media (min-width: 980px){
+      .mapwrap{ grid-template-columns: 1fr 340px; align-items:start; }
+    }
+    canvas{
+      width:100%;
+      max-width: 720px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,.18);
+      display:block;
+    }
+    .note{
+      color: var(--muted);
+      font-size: 12.5px;
+      line-height: 1.45;
+    }
+    .mono{ font-family: var(--mono); }
+    .tag{
+      display:inline-block;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.05);
+      font-size: 12px;
+      color: var(--muted);
+      margin-right: 6px;
+      margin-top: 6px;
+    }
+    .hr{ height:1px; background: var(--line); margin: 12px 0; }
+
+    .footer{
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+  </style>
+</head>
+
+<body>
+<header>
+  <div class="wrap">
+    <div class="toprow">
+      <div>
+        <h1>Risk Workshop Interactive Template (HTML) — 5 ส่วน (5 Sections)</h1>
+        <p class="sub">กรอกข้อมูล → ระบุความเสี่ยง → ให้คะแนน → จัดลำดับ → วางบนแผนที่ความเสี่ยง → สรุปแนวทาง 4Ts + ประเมินความสามารถบริหารความเสี่ยง</p>
+      </div>
+      <div class="btns">
+        <button class="primary" id="btnRecalc">คำนวณ/อัปเดตทั้งหมด (Recalculate)</button>
+        <button id="btnPrint">พิมพ์/บันทึก PDF (Print)</button>
+        <button class="danger" id="btnReset">รีเซ็ตทั้งหมด (Reset)</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+
+    <!-- SECTION 1 -->
+    <section class="card" id="sec1">
+      <div class="hd">
+        <div>
+          <h2>1) ข้อมูลองค์กร (Organization Profile)</h2>
+          <p class="hint">กรอกข้อมูลพื้นฐานขององค์กรเพื่อเป็นบริบทของการประเมินความเสี่ยง (Risk Context)</p>
+        </div>
+        <div class="pill"><span class="dot"></span><b>Workshop Mode</b> — ผู้เข้าร่วมกรอกได้เอง</div>
+      </div>
+      <div class="bd">
+        <div class="row">
+          <div class="field">
+            <label>ชื่อองค์กร (Organization Name)</label>
+            <input type="text" id="orgName" placeholder="เช่น บริษัท ABC จำกัด / ABC Co., Ltd." />
+          </div>
+          <div class="field">
+            <label>จำนวนสมาชิกขององค์กร (Number of Members)</label>
+            <input type="number" id="orgMembers" placeholder="เช่น 120" min="0" />
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:12px;">
+          <div class="field">
+            <label>วิสัยทัศน์ (Vision)</label>
+            <textarea id="orgVision" placeholder="พิมพ์วิสัยทัศน์..."></textarea>
+          </div>
+          <div class="field">
+            <label>พันธกิจ (Mission)</label>
+            <textarea id="orgMission" placeholder="พิมพ์พันธกิจ..."></textarea>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:12px;">
+          <div class="field">
+            <label>ค่านิยมองค์กร (Core Values)</label>
+            <textarea id="orgValues" placeholder="พิมพ์ค่านิยมองค์กร..."></textarea>
+            <div class="small">แนะนำ: 3–6 ข้อ เช่น Integrity, Customer Focus, Innovation เป็นต้น</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2 -->
+    <section class="card" id="sec2" style="margin-top:14px;">
+      <div class="hd">
+        <div>
+          <h2>2) การระบุความเสี่ยง (Risk Identification)</h2>
+          <p class="hint">
+            (A) ตารางตรวจสอบรายการความเสี่ยงตาม “ประเภทความเสี่ยง” พร้อมตัวอย่าง 5 รายการ<br/>
+            (B) ระบุความเสี่ยงจากการวิเคราะห์ SWOT โดยอิงเครื่องมือ 7S McKinsey และ PESTEL Analysis
+          </p>
+        </div>
+        <div class="btns">
+          <button id="btnAddRisk">+ เพิ่มความเสี่ยง (Add Risk)</button>
+        </div>
+      </div>
+
+      <div class="bd">
+        <div class="grid two">
+          <div class="card" style="background: rgba(255,255,255,.03); box-shadow:none;">
+            <div class="hd" style="border-bottom:none;">
+              <div>
+                <h2 style="font-size:14px;margin:0;">2A) ตารางตรวจสอบรายการความเสี่ยง (Risk Checklist Table)</h2>
+                <p class="hint">แก้ไข/เพิ่มรายการได้เอง และใช้ในส่วนประเมินคะแนน (Section 3) โดยอัตโนมัติ</p>
+              </div>
+            </div>
+            <div class="bd" style="padding-top:0;">
+              <table id="tblRisks">
+                <thead>
+                  <tr>
+                    <th style="width:64px;">รหัส (ID)</th>
+                    <th style="width:170px;">ประเภทความเสี่ยง (Risk Type)</th>
+                    <th>รายละเอียดความเสี่ยง (Risk Description)</th>
+                    <th style="width:160px;">ที่มา/เครื่องมือ (Source/Tool)</th>
+                    <th style="width:84px;" class="center">ลบ (Del)</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+              <div class="small">
+                ตัวอย่างประเภทความเสี่ยง (Examples): Strategic/Operational/Financial/Compliance/Technology/People/Reputation เป็นต้น
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="background: rgba(255,255,255,.03); box-shadow:none;">
+            <div class="hd" style="border-bottom:none;">
+              <div>
+                <h2 style="font-size:14px;margin:0;">2B) SWOT + 7S McKinsey + PESTEL</h2>
+                <p class="hint">ใช้เพื่อ “คิดหาความเสี่ยง” เพิ่มเติม แล้วนำไปกรอกในตารางด้านซ้าย</p>
+              </div>
+            </div>
+            <div class="bd" style="padding-top:0;">
+              <div class="row">
+                <div class="field">
+                  <label>SWOT: จุดแข็ง (Strengths)</label>
+                  <textarea id="swotS" placeholder="S: ..."></textarea>
+                </div>
+                <div class="field">
+                  <label>SWOT: จุดอ่อน (Weaknesses)</label>
+                  <textarea id="swotW" placeholder="W: ..."></textarea>
+                </div>
+              </div>
+              <div class="row" style="margin-top:10px;">
+                <div class="field">
+                  <label>SWOT: โอกาส (Opportunities)</label>
+                  <textarea id="swotO" placeholder="O: ..."></textarea>
+                </div>
+                <div class="field">
+                  <label>SWOT: อุปสรรค/ภัยคุกคาม (Threats)</label>
+                  <textarea id="swotT" placeholder="T: ..."></textarea>
+                </div>
+              </div>
+
+              <div class="hr"></div>
+
+              <div class="row">
+                <div class="field">
+                  <label>7S McKinsey (Strategy, Structure, Systems, Shared Values, Style, Staff, Skills)</label>
+                  <textarea id="mck7s" placeholder="เช่น Strategy: ...&#10;Structure: ...&#10;Systems: ...&#10;Shared Values: ...&#10;Style: ...&#10;Staff: ...&#10;Skills: ..."></textarea>
+                </div>
+              </div>
+
+              <div class="row" style="margin-top:10px;">
+                <div class="field">
+                  <label>PESTEL (Political, Economic, Social, Technological, Environmental, Legal)</label>
+                  <textarea id="pestel" placeholder="เช่น Political: ...&#10;Economic: ...&#10;Social: ...&#10;Technological: ...&#10;Environmental: ...&#10;Legal: ..."></textarea>
+                </div>
+              </div>
+
+              <div class="small">
+                วิธีใช้ (How-to): อ่าน SWOT/7S/PESTEL → แปลงเป็น “เหตุการณ์เสี่ยง” (risk event) → เพิ่มในตาราง 2A และเลือก “Source/Tool”
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECTION 3 -->
+    <section class="card" id="sec3" style="margin-top:14px;">
+      <div class="hd">
+        <div>
+          <h2>3) การวิเคราะห์และประเมินความเสี่ยง (Risk Analysis & Assessment)</h2>
+          <p class="hint">
+            ให้คะแนน “โอกาสเกิด (Likelihood)” และ “ผลกระทบ (Impact)” แบบ 5 ระดับ (5-point scale) แล้วคูณเพื่อได้คะแนนความเสี่ยง (Risk Score = L × I)
+            พร้อมจัดเรียงลำดับความสำคัญ (Risk Prioritization) อัตโนมัติจากมากไปน้อย
+          </p>
+        </div>
+        <div class="pill"><b>Scale</b> 5=มากที่สุด → 1=น้อยที่สุด</div>
+      </div>
+      <div class="bd">
+        <div class="grid two">
+          <div>
+            <table id="tblAssess" class="tight">
+              <thead>
+                <tr>
+                  <th style="width:60px;">ID</th>
+                  <th>ความเสี่ยง (Risk)</th>
+                  <th style="width:150px;">Likelihood (โอกาส)</th>
+                  <th style="width:150px;">Impact (ผลกระทบ)</th>
+                  <th style="width:110px;" class="right">Score (L×I)</th>
+                  <th style="width:130px;">Zone (โซน)</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+            <div class="small">
+              เกณฑ์โซน (Zone Rules): <span class="tag">แดง (Red) ≥ 16 = Unacceptable</span>
+              <span class="tag">ส้ม (Orange) 10–15 = Tolerance</span>
+              <span class="tag">เหลือง (Yellow) 5–9 = Acceptable (Monitor)</span>
+              <span class="tag">เขียว (Green) 1–4 = Acceptable</span>
+              <div class="small" style="margin-top:6px;">* คุณสามารถปรับเกณฑ์โซนได้ในโค้ดส่วน JS: <span class="mono">zoneOf(score)</span></div>
+            </div>
+          </div>
+
+          <div>
+            <h3 style="margin:0 0 8px;font-size:14px;">Risk Prioritization (จัดลำดับความสำคัญอัตโนมัติ)</h3>
+            <table id="tblPriority" class="tight">
+              <thead>
+                <tr>
+                  <th style="width:56px;">Rank</th>
+                  <th style="width:60px;">ID</th>
+                  <th>Risk</th>
+                  <th style="width:90px;" class="right">Score</th>
+                  <th style="width:140px;">Zone</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+
+            <div class="hr"></div>
+
+            <div class="kpi">
+              <div class="box"><p class="t">จำนวนความเสี่ยง (Total Risks)</p><p class="v" id="kpiTotal">0</p></div>
+              <div class="box"><p class="t">Unacceptable (Red)</p><p class="v" id="kpiRed">0</p></div>
+              <div class="box"><p class="t">Tolerance (Orange)</p><p class="v" id="kpiOrange">0</p></div>
+              <div class="box"><p class="t">Acceptable (Yellow+Green)</p><p class="v" id="kpiOk">0</p></div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4 -->
+    <section class="card" id="sec4" style="margin-top:14px;">
+      <div class="hd">
+        <div>
+          <h2>4) แผนที่ความเสี่ยง (Risk Map / Risk Matrix)</h2>
+          <p class="hint">
+            นำค่าคะแนนและพิกัด (Likelihood, Impact) ไปวางบนแผนที่ 5×5 อัตโนมัติ พร้อมแยกโซนสี (แดง/ส้ม/เหลือง/เขียว)
+            และเส้นแบ่ง Acceptable / Tolerance / Unacceptable ตามเกณฑ์คะแนน
+          </p>
+        </div>
+      </div>
+
+      <div class="bd">
+        <div class="mapwrap">
+          <div>
+            <canvas id="riskCanvas" width="720" height="520" aria-label="Risk Map"></canvas>
+            <div class="legend">
+              <div class="lg"><span class="sw red"></span> แดง (Red) = <b>Unacceptable Risk</b> → สัญลักษณ์ <b>⚠️</b></div>
+              <div class="lg"><span class="sw orange"></span> ส้ม (Orange) = <b>Tolerance Risk</b> → สัญลักษณ์ <b>🚗💨</b></div>
+              <div class="lg"><span class="sw yellow"></span> เหลือง (Yellow) = <b>Acceptable (Monitor)</b> → สัญลักษณ์ <b>🙂</b></div>
+              <div class="lg"><span class="sw green"></span> เขียว (Green) = <b>Acceptable</b> → สัญลักษณ์ <b>🙂</b></div>
+            </div>
+            <p class="note" style="margin-top:10px;">
+              แกน X = Likelihood (โอกาสเกิด) 1–5 | แกน Y = Impact (ผลกระทบ) 1–5<br/>
+              จุดแต่ละจุดจะใช้ “Rank + ID” เพื่ออ่านง่ายบนแผนที่
+            </p>
+          </div>
+
+          <div class="card" style="background: rgba(255,255,255,.03); box-shadow:none;">
+            <div class="hd" style="border-bottom:none;">
+              <div>
+                <h2 style="font-size:14px;margin:0;">สรุปโซน (Zone Summary)</h2>
+                <p class="hint">จำนวน/สัดส่วนความเสี่ยงในแต่ละโซน เพื่อใช้สรุปความสามารถในการบริหารความเสี่ยง (Section 5)</p>
+              </div>
+            </div>
+            <div class="bd" style="padding-top:0;">
+              <div class="kpi" style="grid-template-columns:1fr;">
+                <div class="box"><p class="t">Red (Unacceptable)</p><p class="v" id="pctRed">0%</p></div>
+                <div class="box"><p class="t">Orange (Tolerance)</p><p class="v" id="pctOrange">0%</p></div>
+                <div class="box"><p class="t">Yellow (Acceptable/Monitor)</p><p class="v" id="pctYellow">0%</p></div>
+                <div class="box"><p class="t">Green (Acceptable)</p><p class="v" id="pctGreen">0%</p></div>
+              </div>
+              <div class="status" id="orgCapability">
+                <b>สถานะความสามารถในการบริหารความเสี่ยงขององค์กร</b><br/>
+                เพิ่ม/ให้คะแนนความเสี่ยงเพื่อดูผลการประเมินอัตโนมัติ
+              </div>
+
+              <div class="footer">
+                เกณฑ์สรุป (จาก “สัดส่วนความเสี่ยงที่ยอมรับไม่ได้” = Red):
+                <ul style="margin:8px 0 0; padding-left: 18px;">
+                  <li>&gt; 50% → องค์กรอยู่ในขั้น <b>วิกฤติ</b></li>
+                  <li>30–50% → มีปัญหาเรื่อง <b>มาตรการ/แผนความเสี่ยง</b> ที่เหมาะสม</li>
+                  <li>10–30% → ต้องทำ <b>การวิเคราะห์/ประเมินให้เป็นปัจจุบันสม่ำเสมอ</b></li>
+                  <li>&lt; 10% → มีความสามารถในการรับมือ <b>ดีเพียงพอ</b></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECTION 5 -->
+    <section class="card" id="sec5" style="margin-top:14px;">
+      <div class="hd">
+        <div>
+          <h2>5) แนวทางการจัดการความเสี่ยง (Risk Response Plan — 4Ts)</h2>
+          <p class="hint">
+            ระบบจะดึง “รายการความเสี่ยงตามลำดับความสำคัญ” มาใส่ให้อัตโนมัติ พร้อมข้อเสนอแนะประเภทกลยุทธ์ 4Ts:
+            <b>Terminate, Tolerate, Treat, Transfer</b> (ผู้เข้าร่วมสามารถปรับเองได้)
+          </p>
+        </div>
+        <div class="pill"><b>Auto-fill</b> จาก Risk Prioritization</div>
+      </div>
+
+      <div class="bd">
+        <table id="tblResponse" class="tight">
+          <thead>
+            <tr>
+              <th style="width:56px;">Rank</th>
+              <th style="width:60px;">ID</th>
+              <th>Risk</th>
+              <th style="width:140px;">Zone</th>
+              <th style="width:160px;">4Ts Strategy</th>
+              <th>มาตรการ/แนวทาง (Controls/Measures)</th>
+              <th style="width:160px;">ผู้รับผิดชอบ (Owner)</th>
+              <th style="width:150px;">กำหนดเวลา (Timeline)</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+
+        <div class="status" style="margin-top:12px;">
+          <b>คำแนะนำการใช้ 4Ts (Guide)</b><br/>
+          • <b>Terminate</b>: ยุติกิจกรรม/หลีกเลี่ยงความเสี่ยง (Avoid/Stop)<br/>
+          • <b>Tolerate</b>: ยอมรับได้และเฝ้าระวัง (Accept/Monitor)<br/>
+          • <b>Treat</b>: ลดโอกาสหรือผลกระทบ (Mitigate/Reduce)<br/>
+          • <b>Transfer</b>: โอนความเสี่ยง เช่น ประกันภัย/Outsource/Contract (Share/Transfer)
+        </div>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<script>
+/* =========================================================
+   Risk Workshop Interactive Template
+   - Vanilla JS, works on Safari iPad
+   - Single-file HTML
+   ========================================================= */
+
+const STORAGE_KEY = "risk_workshop_template_v1";
+
+/** Risk object structure:
+ * { id, type, desc, source, likelihood, impact, score, zone }
+ */
+let risks = [];
+
+/* ---------- Helpers ---------- */
+const $ = (sel) => document.querySelector(sel);
+const el = (tag, attrs={}) => {
+  const n = document.createElement(tag);
+  Object.entries(attrs).forEach(([k,v]) => {
+    if (k === "class") n.className = v;
+    else if (k === "text") n.textContent = v;
+    else n.setAttribute(k, v);
+  });
+  return n;
+};
+
+function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
+
+function zoneOf(score){
+  // You can adjust these thresholds if your organization uses a different matrix.
+  if (score >= 16) return { key:"RED", name:"Unacceptable (Red)", color:getCSS("--red"), symbol:"⚠️" };
+  if (score >= 10) return { key:"ORANGE", name:"Tolerance (Orange)", color:getCSS("--orange"), symbol:"🚗💨" };
+  if (score >= 5)  return { key:"YELLOW", name:"Acceptable/Monitor (Yellow)", color:getCSS("--yellow"), symbol:"🙂" };
+  return { key:"GREEN", name:"Acceptable (Green)", color:getCSS("--green"), symbol:"🙂" };
+}
+function getCSS(varName){
+  return getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+}
+
+function scoreOf(likelihood, impact){
+  return (Number(likelihood)||0) * (Number(impact)||0);
+}
+
+function ensureId(idx){
+  // Simple ID format: R01, R02, ...
+  return "R" + String(idx).padStart(2, "0");
+}
+
+/* ---------- Default Data (5 examples) ---------- */
+function seedIfEmpty(){
+  if (risks.length) return;
+
+  risks = [
+    {
+      id: "R01",
+      type: "Strategic (เชิงกลยุทธ์)",
+      desc: "กลยุทธ์ผลิตภัณฑ์/บริการไม่สอดคล้องความต้องการตลาด ทำให้ยอดขายลดลง",
+      source: "SWOT / 7S",
+      likelihood: 3,
+      impact: 5
+    },
+    {
+      id: "R02",
+      type: "Operational (การปฏิบัติการ)",
+      desc: "กระบวนการทำงานล่าช้า/คอขวด ส่งมอบไม่ทันตาม SLA",
+      source: "7S (Systems)",
+      likelihood: 4,
+      impact: 3
+    },
+    {
+      id: "R03",
+      type: "Financial (การเงิน)",
+      desc: "ต้นทุนผันผวน/สภาพคล่องตึงตัว ส่งผลต่อการลงทุนและการจ่ายชำระ",
+      source: "PESTEL (Economic)",
+      likelihood: 3,
+      impact: 4
+    },
+    {
+      id: "R04",
+      type: "Compliance (กฎหมาย/กำกับดูแล)",
+      desc: "ไม่ปฏิบัติตามข้อกำหนด PDPA/กฎหมายที่เกี่ยวข้อง อาจถูกปรับและเสียชื่อเสียง",
+      source: "PESTEL (Legal)",
+      likelihood: 2,
+      impact: 5
+    },
+    {
+      id: "R05",
+      type: "Technology (เทคโนโลยี/ไซเบอร์)",
+      desc: "ระบบล่ม/ถูกโจมตี ทำให้หยุดให้บริการและข้อมูลสูญหาย",
+      source: "Checklist / PESTEL (Tech)",
+      likelihood: 4,
+      impact: 5
+    }
+  ];
+
+  recalcAll();
+}
+
+/* ---------- Persistence ---------- */
+function saveAll(){
+  const payload = {
+    org: {
+      name: $("#orgName").value || "",
+      members: $("#orgMembers").value || "",
+      vision: $("#orgVision").value || "",
+      mission: $("#orgMission").value || "",
+      values: $("#orgValues").value || ""
+    },
+    analyzers: {
+      swotS: $("#swotS").value || "",
+      swotW: $("#swotW").value || "",
+      swotO: $("#swotO").value || "",
+      swotT: $("#swotT").value || "",
+      mck7s: $("#mck7s").value || "",
+      pestel: $("#pestel").value || ""
+    },
+    risks
+  };
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(payload)); }catch(e){}
+}
+
+function loadAll(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return false;
+    const payload = JSON.parse(raw);
+
+    if(payload?.org){
+      $("#orgName").value = payload.org.name || "";
+      $("#orgMembers").value = payload.org.members || "";
+      $("#orgVision").value = payload.org.vision || "";
+      $("#orgMission").value = payload.org.mission || "";
+      $("#orgValues").value = payload.org.values || "";
+    }
+    if(payload?.analyzers){
+      $("#swotS").value = payload.analyzers.swotS || "";
+      $("#swotW").value = payload.analyzers.swotW || "";
+      $("#swotO").value = payload.analyzers.swotO || "";
+      $("#swotT").value = payload.analyzers.swotT || "";
+      $("#mck7s").value = payload.analyzers.mck7s || "";
+      $("#pestel").value = payload.analyzers.pestel || "";
+    }
+
+    if(Array.isArray(payload?.risks)){
+      risks = payload.risks.map((r, i) => ({
+        id: r.id || ensureId(i+1),
+        type: r.type || "",
+        desc: r.desc || "",
+        source: r.source || "",
+        likelihood: clamp(Number(r.likelihood)||1, 1, 5),
+        impact: clamp(Number(r.impact)||1, 1, 5)
+      }));
+    }
+    recalcAll();
+    return true;
+  }catch(e){
+    return false;
+  }
+}
+
+/* ---------- UI Builders ---------- */
+function buildRiskTable(){
+  const tbody = $("#tblRisks tbody");
+  tbody.innerHTML = "";
+
+  risks.forEach((r, idx) => {
+    const tr = document.createElement("tr");
+
+    // ID
+    const tdId = document.createElement("td");
+    const inpId = el("input", { class:"mini", type:"text", value: r.id || ensureId(idx+1) });
+    inpId.addEventListener("input", () => { r.id = inpId.value.trim() || ensureId(idx+1); syncAndRecalc(); });
+    tdId.appendChild(inpId);
+
+    // Type
+    const tdType = document.createElement("td");
+    const inpType = el("input", { class:"mini", type:"text", value: r.type || "" });
+    inpType.placeholder = "เช่น Strategic (เชิงกลยุทธ์)";
+    inpType.addEventListener("input", () => { r.type = inpType.value; syncAndRecalc(false); });
+    tdType.appendChild(inpType);
+
+    // Desc
+    const tdDesc = document.createElement("td");
+    const inpDesc = el("input", { class:"mini", type:"text", value: r.desc || "" });
+    inpDesc.placeholder = "พิมพ์รายละเอียดความเสี่ยง...";
+    inpDesc.addEventListener("input", () => { r.desc = inpDesc.value; syncAndRecalc(false); });
+    tdDesc.appendChild(inpDesc);
+
+    // Source/Tool
+    const tdSrc = document.createElement("td");
+    const selSrc = el("select", { class:"mini" });
+    const options = [
+      "Checklist (ตารางตรวจสอบ)",
+      "SWOT",
+      "7S McKinsey",
+      "PESTEL",
+      "SWOT / 7S",
+      "SWOT / PESTEL",
+      "7S / PESTEL",
+      "Other (อื่น ๆ)"
+    ];
+    options.forEach(o => {
+      const opt = el("option", { value:o, text:o });
+      selSrc.appendChild(opt);
+    });
+    selSrc.value = r.source || "Checklist (ตารางตรวจสอบ)";
+    selSrc.addEventListener("change", () => { r.source = selSrc.value; syncAndRecalc(false); });
+    tdSrc.appendChild(selSrc);
+
+    // Delete
+    const tdDel = document.createElement("td");
+    tdDel.className = "center";
+    const btn = el("button", { text:"ลบ", type:"button" });
+    btn.className = "danger";
+    btn.style.padding = "7px 10px";
+    btn.style.borderRadius = "12px";
+    btn.addEventListener("click", () => {
+      risks.splice(idx, 1);
+      // re-normalize ids if some are blank
+      risks.forEach((x, i) => { if(!x.id) x.id = ensureId(i+1); });
+      syncAndRecalc();
+    });
+    tdDel.appendChild(btn);
+
+    tr.appendChild(tdId);
+    tr.appendChild(tdType);
+    tr.appendChild(tdDesc);
+    tr.appendChild(tdSrc);
+    tr.appendChild(tdDel);
+
+    tbody.appendChild(tr);
+  });
+}
+
+function buildAssessTable(){
+  const tbody = $("#tblAssess tbody");
+  tbody.innerHTML = "";
+
+  risks.forEach((r) => {
+    const tr = document.createElement("tr");
+
+    // ID
+    const tdId = el("td", { text: r.id || "" });
+
+    // Risk desc
+    const tdRisk = el("td");
+    tdRisk.innerHTML = `<div style="font-weight:800">${escapeHtml(r.desc || "(ยังไม่ระบุรายละเอียด)")}</div>
+                        <div style="color:rgba(238,242,255,.72);font-size:12px;margin-top:2px;">
+                          ${escapeHtml(r.type || "")} • ${escapeHtml(r.source || "")}
+                        </div>`;
+
+    // Likelihood select
+    const tdL = document.createElement("td");
+    const selL = makeScaleSelect(r.likelihood);
+    selL.addEventListener("change", () => { r.likelihood = Number(selL.value); syncAndRecalc(); });
+    tdL.appendChild(selL);
+
+    // Impact select
+    const tdI = document.createElement("td");
+    const selI = makeScaleSelect(r.impact);
+    selI.addEventListener("change", () => { r.impact = Number(selI.value); syncAndRecalc(); });
+    tdI.appendChild(selI);
+
+    // Score
+    const s = scoreOf(r.likelihood, r.impact);
+    r.score = s;
+    r.zone = zoneOf(s);
+
+    const tdS = el("td", { class:"right", text: String(s) });
+
+    // Zone
+    const tdZ = el("td");
+    tdZ.innerHTML = `<span class="tag" style="border-color:rgba(238,242,255,.20);">
+                      <b style="color:${r.zone.color}">${escapeHtml(r.zone.symbol)}</b>
+                      ${escapeHtml(r.zone.name)}
+                    </span>`;
+
+    tr.append(tdId, tdRisk, tdL, tdI, tdS, tdZ);
+    tbody.appendChild(tr);
+  });
+}
+
+function makeScaleSelect(value){
+  const sel = el("select", { class:"mini" });
+  // 5 levels: 5..1 (most -> least)
+  const labels = {
+    5: "5 (มากที่สุด / Very High)",
+    4: "4 (มาก / High)",
+    3: "3 (ปานกลาง / Medium)",
+    2: "2 (น้อย / Low)",
+    1: "1 (น้อยที่สุด / Very Low)"
+  };
+  [5,4,3,2,1].forEach(n => {
+    sel.appendChild(el("option", { value:String(n), text: labels[n] }));
+  });
+  sel.value = String(clamp(Number(value)||3, 1, 5));
+  return sel;
+}
+
+function buildPriorityTable(){
+  const tbody = $("#tblPriority tbody");
+  tbody.innerHTML = "";
+
+  const ranked = getRankedRisks();
+
+  ranked.forEach((r, i) => {
+    const tr = document.createElement("tr");
+    const rank = i+1;
+
+    const tdRank = el("td", { text: String(rank) });
+    const tdId = el("td", { text: r.id });
+    const tdRisk = el("td", { text: r.desc || "" });
+    const tdScore = el("td", { class:"right", text: String(r.score||0) });
+    const tdZone = el("td");
+    tdZone.innerHTML = `<span class="tag"><b style="color:${r.zone.color}">${escapeHtml(r.zone.symbol)}</b> ${escapeHtml(r.zone.name)}</span>`;
+
+    tr.append(tdRank, tdId, tdRisk, tdScore, tdZone);
+    tbody.appendChild(tr);
+  });
+}
+
+function buildResponseTable(){
+  const tbody = $("#tblResponse tbody");
+  tbody.innerHTML = "";
+
+  const ranked = getRankedRisks();
+
+  ranked.forEach((r, i) => {
+    const tr = document.createElement("tr");
+    const rank = i+1;
+
+    const tdRank = el("td", { text: String(rank) });
+    const tdId = el("td", { text: r.id });
+    const tdRisk = el("td", { text: r.desc || "" });
+
+    const tdZone = el("td");
+    tdZone.innerHTML = `<span class="tag"><b style="color:${r.zone.color}">${escapeHtml(r.zone.symbol)}</b> ${escapeHtml(r.zone.name)}</span>`;
+
+    const td4t = document.createElement("td");
+    const sel = el("select", { class:"mini" });
+    const options = ["Terminate", "Tolerate", "Treat", "Transfer"];
+    options.forEach(o => sel.appendChild(el("option", { value:o, text:o })));
+
+    // Suggest 4Ts based on zone (can be overridden by user)
+    const suggested = suggest4T(r.zone.key);
+    // keep user choice if already stored
+    if(!r.response4t) r.response4t = suggested;
+    sel.value = r.response4t;
+
+    sel.addEventListener("change", () => { r.response4t = sel.value; saveAll(); });
+    td4t.appendChild(sel);
+
+    const tdCtrl = document.createElement("td");
+    const inpCtrl = el("input", { class:"mini", type:"text", value: r.controls || "" });
+    inpCtrl.placeholder = "ระบุมาตรการ/แนวทางที่เป็นไปได้...";
+    inpCtrl.addEventListener("input", () => { r.controls = inpCtrl.value; saveAll(); });
+    tdCtrl.appendChild(inpCtrl);
+
+    const tdOwner = document.createElement("td");
+    const inpOwner = el("input", { class:"mini", type:"text", value: r.owner || "" });
+    inpOwner.placeholder = "เช่น ฝ่าย IT / Risk Owner";
+    inpOwner.addEventListener("input", () => { r.owner = inpOwner.value; saveAll(); });
+    tdOwner.appendChild(inpOwner);
+
+    const tdTime = document.createElement("td");
+    const inpTime = el("input", { class:"mini", type:"text", value: r.timeline || "" });
+    inpTime.placeholder = "เช่น Q1/2026 หรือ 30 วัน";
+    inpTime.addEventListener("input", () => { r.timeline = inpTime.value; saveAll(); });
+    tdTime.appendChild(inpTime);
+
+    tr.append(tdRank, tdId, tdRisk, tdZone, td4t, tdCtrl, tdOwner, tdTime);
+    tbody.appendChild(tr);
+  });
+}
+
+function suggest4T(zoneKey){
+  // Simple suggestion rule (editable):
+  // RED: Treat (default) because you often need mitigation; sometimes Terminate/Transfer
+  // ORANGE: Treat (default), or Transfer
+  // YELLOW/GREEN: Tolerate
+  if(zoneKey === "RED") return "Treat";
+  if(zoneKey === "ORANGE") return "Treat";
+  return "Tolerate";
+}
+
+function getRankedRisks(){
+  // Score and zone refresh
+  risks.forEach(r => {
+    r.score = scoreOf(r.likelihood, r.impact);
+    r.zone = zoneOf(r.score);
+  });
+  // Sort by score desc, tie-break by impact desc, then likelihood desc, then id
+  return [...risks].sort((a,b) => {
+    if((b.score||0)!==(a.score||0)) return (b.score||0)-(a.score||0);
+    if((b.impact||0)!==(a.impact||0)) return (b.impact||0)-(a.impact||0);
+    if((b.likelihood||0)!==(a.likelihood||0)) return (b.likelihood||0)-(a.likelihood||0);
+    return String(a.id).localeCompare(String(b.id));
+  });
+}
+
+/* ---------- Risk Map Drawing ---------- */
+function drawRiskMap(){
+  const canvas = $("#riskCanvas");
+  const ctx = canvas.getContext("2d");
+
+  const W = canvas.width, H = canvas.height;
+
+  // Layout
+  const padL = 64, padR = 18, padT = 22, padB = 56;
+  const plotW = W - padL - padR;
+  const plotH = H - padT - padB;
+
+  ctx.clearRect(0,0,W,H);
+
+  // background
+  ctx.fillStyle = "rgba(0,0,0,.12)";
+  ctx.fillRect(0,0,W,H);
+
+  // grid (5x5) with zone colors by score = L*I at each cell
+  const cellW = plotW / 5;
+  const cellH = plotH / 5;
+
+  for(let iy=1; iy<=5; iy++){
+    for(let ix=1; ix<=5; ix++){
+      const score = ix * iy;
+      const z = zoneOf(score);
+
+      const x = padL + (ix-1)*cellW;
+      const y = padT + (5-iy)*cellH; // invert y so Impact increases upward
+
+      // Fill cell
+      ctx.globalAlpha = 0.24;
+      ctx.fillStyle = z.color;
+      ctx.fillRect(x, y, cellW, cellH);
+      ctx.globalAlpha = 1;
+
+      // Border
+      ctx.strokeStyle = "rgba(238,242,255,.16)";
+      ctx.lineWidth = 1;
+      ctx.strokeRect(x, y, cellW, cellH);
+    }
+  }
+
+  // Axes labels
+  ctx.fillStyle = "rgba(238,242,255,.85)";
+  ctx.font = "700 13px system-ui, -apple-system, Segoe UI, Roboto, Noto Sans Thai, Arial";
+  ctx.fillText("Impact (ผลกระทบ) ↑", 10, 18);
+  ctx.fillText("Likelihood (โอกาสเกิด) →", padL + 10, H - 14);
+
+  // Ticks
+  ctx.font = "600 12px system-ui, -apple-system, Segoe UI, Roboto, Noto Sans Thai, Arial";
+  for(let i=1;i<=5;i++){
+    // x tick labels
+    const x = padL + (i-0.5)*cellW;
+    ctx.fillStyle = "rgba(238,242,255,.85)";
+    ctx.textAlign = "center";
+    ctx.fillText(String(i), x, H - 28);
+
+    // y tick labels
+    const y = padT + (5-(i-0.5))*cellH;
+    ctx.textAlign = "right";
+    ctx.fillText(String(i), padL - 10, y + 4);
+  }
+  ctx.textAlign = "left";
+
+  // Draw acceptance boundary lines (by score thresholds)
+  // We'll draw dashed contours approximated by score regions:
+  // - Red boundary at score >=16
+  // - Orange boundary at score >=10
+  // These are drawn as dashed rectangles with labels (simple & readable for workshop)
+  drawZoneLabel(ctx, padL + plotW - 10, padT + 18, "Unacceptable", getCSS("--red"));
+  drawZoneLabel(ctx, padL + plotW - 10, padT + 40, "Tolerance", getCSS("--orange"));
+  drawZoneLabel(ctx, padL + plotW - 10, padT + 62, "Acceptable", getCSS("--green"));
+
+  // Plot points (rank + id)
+  const ranked = getRankedRisks();
+  ranked.forEach((r, idx) => {
+    const L = clamp(Number(r.likelihood)||1, 1, 5);
+    const I = clamp(Number(r.impact)||1, 1, 5);
+
+    const cx = padL + (L-0.5)*cellW;
+    const cy = padT + (5-(I-0.5))*cellH;
+
+    // point
+    ctx.beginPath();
+    ctx.fillStyle = "rgba(255,255,255,.92)";
+    ctx.strokeStyle = "rgba(0,0,0,.55)";
+    ctx.lineWidth = 2;
+    ctx.arc(cx, cy, 9, 0, Math.PI*2);
+    ctx.fill();
+    ctx.stroke();
+
+    // label: symbol + rank
+    const symbol = r.zone.symbol || "";
+    const label = `${symbol}${idx+1}`;
+    ctx.font = "900 12px system-ui, -apple-system, Segoe UI, Roboto, Noto Sans Thai, Arial";
+    ctx.fillStyle = "rgba(11,16,32,.92)";
+    ctx.textAlign = "center";
+    ctx.fillText(label, cx, cy + 4);
+    ctx.textAlign = "left";
+
+    // small ID near point
+    ctx.font = "700 11px system-ui, -apple-system, Segoe UI, Roboto, Noto Sans Thai, Arial";
+    ctx.fillStyle = "rgba(238,242,255,.85)";
+    ctx.fillText(r.id, cx + 12, cy - 10);
+  });
+
+  // Caption
+  ctx.font = "600 12px system-ui, -apple-system, Segoe UI, Roboto, Noto Sans Thai, Arial";
+  ctx.fillStyle = "rgba(238,242,255,.75)";
+  ctx.fillText("จุดบนแผนที่ = อ้างอิงจาก Rank (สัญลักษณ์ตามโซน) และ ID", padL, H - 6);
+}
+
+function drawZoneLabel(ctx, x, y, text, color){
+  ctx.textAlign = "right";
+  ctx.font = "800 12px system-ui, -apple-system, Segoe UI, Roboto, Noto Sans Thai, Arial";
+  ctx.fillStyle = color;
+  ctx.fillText(text, x, y);
+  ctx.textAlign = "left";
+}
+
+/* ---------- KPI / Capability Summary ---------- */
+function updateKPIs(){
+  const total = risks.length || 0;
+  const counts = { RED:0, ORANGE:0, YELLOW:0, GREEN:0 };
+  risks.forEach(r => {
+    const z = zoneOf(scoreOf(r.likelihood, r.impact));
+    counts[z.key] = (counts[z.key]||0)+1;
+  });
+
+  $("#kpiTotal").textContent = String(total);
+  $("#kpiRed").textContent = String(counts.RED||0);
+  $("#kpiOrange").textContent = String(counts.ORANGE||0);
+  $("#kpiOk").textContent = String((counts.YELLOW||0) + (counts.GREEN||0));
+
+  const pct = (n) => total ? Math.round((n/total)*100) : 0;
+
+  $("#pctRed").textContent = pct(counts.RED) + "%";
+  $("#pctOrange").textContent = pct(counts.ORANGE) + "%";
+  $("#pctYellow").textContent = pct(counts.YELLOW) + "%";
+  $("#pctGreen").textContent = pct(counts.GREEN) + "%";
+
+  // Organization capability decision based on % Unacceptable (Red)
+  const redPct = pct(counts.RED);
+  let msg = "";
+  let tag = "";
+
+  if(total === 0){
+    msg = "เพิ่ม/ให้คะแนนความเสี่ยงเพื่อดูผลการประเมินอัตโนมัติ";
+    tag = "—";
+  } else if(redPct > 50){
+    tag = "วิกฤติ (Critical)";
+    msg = "จำนวนความเสี่ยงที่ <b>ยอมรับไม่ได้ (Unacceptable)</b> เกิน <b>50%</b> ของทั้งหมด → องค์กรอยู่ในขั้น <b>วิกฤติ</b> ควรเร่งกำหนดมาตรการระดับองค์กร (Immediate enterprise-wide action).";
+  } else if(redPct >= 30 && redPct <= 50){
+    tag = "มีปัญหาด้านมาตรการ/แผน (Planning Issue)";
+    msg = "สัดส่วน Unacceptable อยู่ช่วง <b>30–50%</b> → องค์กรมีปัญหาเรื่อง <b>การกำหนดมาตรการและการวางแผนความเสี่ยง</b> ควรปรับ Risk Response และกำกับติดตามเข้มข้น.";
+  } else if(redPct >= 10 && redPct < 30){
+    tag = "ต้องอัปเดตสม่ำเสมอ (Need Regular Review)";
+    msg = "สัดส่วน Unacceptable อยู่ช่วง <b>10–30%</b> → ควรทำ <b>การวิเคราะห์และประเมินความเสี่ยงให้เป็นปัจจุบันอย่างสม่ำเสมอ</b> และปรับมาตรการตามสถานการณ์.";
+  } else {
+    tag = "ดีเพียงพอ (Adequate)";
+    msg = "สัดส่วน Unacceptable ต่ำกว่า <b>10%</b> → องค์กรมีความสามารถในการรับมือ <b>ดีเพียงพอ</b> แนะนำคงระบบติดตาม/ทบทวน (monitor & review).";
+  }
+
+  $("#orgCapability").innerHTML = `<b>สถานะ: ${tag}</b><br/>${msg}`;
+}
+
+/* ---------- Main Recalc ---------- */
+function recalcAll(){
+  // compute scores/zones
+  risks.forEach((r, i) => {
+    if(!r.id) r.id = ensureId(i+1);
+    r.likelihood = clamp(Number(r.likelihood)||3, 1, 5);
+    r.impact = clamp(Number(r.impact)||3, 1, 5);
+    r.score = scoreOf(r.likelihood, r.impact);
+    r.zone = zoneOf(r.score);
+  });
+
+  buildRiskTable();
+  buildAssessTable();
+  buildPriorityTable();
+  buildResponseTable();
+  drawRiskMap();
+  updateKPIs();
+  saveAll();
+}
+
+function syncAndRecalc(full = true){
+  // Avoid too heavy redraws while typing, but keep consistent.
+  if(full) recalcAll();
+  else saveAll();
+}
+
+/* ---------- Escaping ---------- */
+function escapeHtml(s){
+  return String(s ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+/* ---------- Events ---------- */
+$("#btnAddRisk").addEventListener("click", () => {
+  const next = ensureId(risks.length + 1);
+  risks.push({
+    id: next,
+    type: "Operational (การปฏิบัติการ)",
+    desc: "",
+    source: "Checklist (ตารางตรวจสอบ)",
+    likelihood: 3,
+    impact: 3
+  });
+  recalcAll();
+});
+
+$("#btnRecalc").addEventListener("click", () => recalcAll());
+$("#btnPrint").addEventListener("click", () => window.print());
+$("#btnReset").addEventListener("click", () => {
+  const ok = confirm("ต้องการรีเซ็ตทั้งหมดใช่ไหม? (This will clear all inputs.)");
+  if(!ok) return;
+  try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
+  // Clear inputs
+  ["#orgName","#orgMembers","#orgVision","#orgMission","#orgValues",
+   "#swotS","#swotW","#swotO","#swotT","#mck7s","#pestel"].forEach(id => {
+    const node = $(id);
+    if(node) node.value = "";
+  });
+  risks = [];
+  seedIfEmpty();
+});
+
+[
+  "#orgName","#orgMembers","#orgVision","#orgMission","#orgValues",
+  "#swotS","#swotW","#swotO","#swotT","#mck7s","#pestel"
+].forEach(sel => {
+  const node = $(sel);
+  if(node){
+    node.addEventListener("input", () => saveAll());
+  }
+});
+
+/* ---------- Init ---------- */
+(function init(){
+  const loaded = loadAll();
+  if(!loaded){
+    seedIfEmpty(); // adds 5 examples
+  } else {
+    // ensure at least one example if loaded empty
+    if(!risks.length) seedIfEmpty();
+  }
+  // Ensure canvas updates on resize (CSS scaling) — redraw is enough.
+  window.addEventListener("resize", () => drawRiskMap());
+})();
+</script>
+
+</body>
+</html>
